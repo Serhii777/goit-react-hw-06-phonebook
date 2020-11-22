@@ -1,21 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 import ContactListItem from "./ContactListItem";
+
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import styles from "./ContactList.module.css";
 import contactFade from "../Animation/ContactFade.module.css";
 
-const ContactList = ({ contacts, onRemoveTask }) => {
+const ContactList = ({ contacts }) => {
   return (
     <div className={styles.contactWrapper}>
       <TransitionGroup component="ul" className={styles.contactList}>
-        {contacts.map(({ id, name, number }) => (
+        {contacts.map(({ id }) => (
           <CSSTransition key={id} timeout={250} classNames={contactFade}>
             <ContactListItem
               key={id}
-              name={name}
-              number={number}
-              onRemove={() => onRemoveTask(id)}
+              id={id}
             />
           </CSSTransition>
         ))}
@@ -31,12 +30,6 @@ ContactList.propTypes = {
     name: PropTypes.string.isRequired,
     number: PropTypes.string.isRequired,
   }),
-};
-
-ContactList.defaultProps = {
-  id: "",
-  name: "",
-  number: "",
 };
 
 export default ContactList;

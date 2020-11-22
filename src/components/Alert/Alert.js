@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import stylesAlert from "./Alert.module.css";
 
 const Alert = ({ newContactUnique, timeout }) => {
@@ -11,6 +13,14 @@ const Alert = ({ newContactUnique, timeout }) => {
       </p>
     </div>
   );
+};
+
+Alert.propTypes = {
+  newContactUnique: (PropTypes.bool, PropTypes.object),
+};
+
+Alert.defaultProps = {
+  newContactUnique: false,
 };
 
 export default Alert;

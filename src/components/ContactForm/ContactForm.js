@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import store from "../../redux/store";
+
 import styles from "./ContactForm.module.css";
 
 class ContactForm extends Component {
@@ -9,7 +11,7 @@ class ContactForm extends Component {
   };
 
   handleChange = (e) => {
-    const { name, value  } = e.target;
+    const { name, value } = e.target;
     this.setState({
       [name]: value,
     });
@@ -18,8 +20,25 @@ class ContactForm extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    this.props.onAddContact(this.state);
+    const newContact = this.state;
+    const { contactList } = store.getState();
 
+    let newContactUnique = contactList.find(
+      ({ name }) => name === newContact.name
+    );
+
+    newContactUnique === undefined
+      ? (newContactUnique = false)
+      : (newContactUnique = newContactUnique);
+
+    const isContactExist = () => {
+      return !newContactUnique
+        ? this.props.onAddContact(this.state) &&
+            this.props.onIsNewContactUnique(newContactUnique)
+        : this.props.onIsNewContactUnique(newContactUnique);
+    };
+
+    isContactExist();
     this.setState({ name: "", number: "" });
   };
 
@@ -60,13 +79,17 @@ class ContactForm extends Component {
 }
 
 ContactForm.propTypes = {
+  contacts: PropTypes.arrayOf(PropTypes.object),
   name: PropTypes.string,
   number: PropTypes.string,
+  newContactUnique: (PropTypes.bool, PropTypes.object),
 };
 
 ContactForm.defaultProps = {
+  contacts: [],
   name: "",
-  number: '',
+  number: "",
+  newContactUnique: false,
 };
 
 export default ContactForm;
